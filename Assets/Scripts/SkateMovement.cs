@@ -33,7 +33,7 @@ public class SkateMovement : MonoBehaviour
         //gravity
         rb.AddForce(gravity * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        //add sideways friction for realistic turning when on ground
+        //add sideways friction for turning 
         float sideways_velocity = local_velocity.x;
         if (sideways_velocity > 0.3)
         {
@@ -54,8 +54,6 @@ public class SkateMovement : MonoBehaviour
 
     void inputs(float h_input, float v_input, Vector3 local_velocity)  //controls player inputs like turning and moving
     {
-
-        //ground movement
         //forward
         if (rb.velocity.magnitude < maxSpeed)
         {
