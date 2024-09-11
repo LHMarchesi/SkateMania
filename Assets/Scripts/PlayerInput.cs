@@ -61,5 +61,10 @@ public class PlayerInput : MonoBehaviour
             HandleInput();
         }
 
+    public void SetJumping(bool state)
+    {
+        isJumping = state;
+    }
+
     }
 

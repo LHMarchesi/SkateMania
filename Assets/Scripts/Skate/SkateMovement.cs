@@ -11,7 +11,7 @@ public class SkateMovement : MonoBehaviour
     private float kickturn_speed = 150f;
     private float turn_speed = 15f;
     private float sidewaysFriction = 15f;
-    private Vector3 gravity = new(0, -300f, 0);
+    public Vector3 gravity = new(0, -300f, 0);
 
     private void Awake()
     {
