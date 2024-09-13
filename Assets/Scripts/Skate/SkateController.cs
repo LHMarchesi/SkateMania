@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class SkateController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private PlayerInput playerInput;
+    public Vector3 gravity = new(0, -300f, 0);
 
     [SerializeField] private float pushForce;
     [SerializeField] private float maxSpeed = 7.5f;
-    private float kickturn_thresh = 2f;
-    private float kickturn_speed = 150f;
-    private float turn_speed = 15f;
-    private float sidewaysFriction = 15f;
-    public Vector3 gravity = new(0, -300f, 0);
+    [SerializeField] private float kickturn_thresh = 2f;
+    [SerializeField] private float kickturn_speed = 150f;
+    [SerializeField] private float turn_speed = 15f;
+    [SerializeField] private float sidewaysFriction = 15f;
+
+    private Rigidbody rb;
+    private PlayerInput playerInput;
 
     private void Awake()
     {
@@ -29,11 +30,11 @@ public class SkateController : MonoBehaviour
 
         if (!playerInput.IsJumping)
         {
-            physics(local_velocity);
-            inputs(h_input, v_input, local_velocity);
+            Physics(local_velocity);
+            Inputs(h_input, v_input, local_velocity);
         }
     }
-    void physics(Vector3 local_velocity) //applys custom physics like sideways friction and gravity
+    private void Physics(Vector3 local_velocity) // custom physics movimiento lateral y gravedad
     {
         //gravity
         rb.AddForce(gravity * Time.fixedDeltaTime, ForceMode.Acceleration);
@@ -57,7 +58,7 @@ public class SkateController : MonoBehaviour
         rb.velocity = transform.TransformDirection(local_velocity); //set back to world rel
     }
 
-    void inputs(float h_input, float v_input, Vector3 local_velocity)  //controls player inputs like turning and moving
+   private void Inputs(float h_input, float v_input, Vector3 local_velocity)  //controla los inputs para y agrega fuerzas   // Volver a ver
     {
         //forward
         if (rb.velocity.magnitude < maxSpeed)

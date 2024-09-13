@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ollie : MonoBehaviour
+public class TrickHandler : MonoBehaviour
 {
     [SerializeField] private PlayerInput input;
     [SerializeField] private GameObject sktObj;
