@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 
-public class SkateMovement : MonoBehaviour
+public class SkateController : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private PlayerInput playerInput;
 
     [SerializeField] private float pushForce;
     [SerializeField] private float maxSpeed = 7.5f;
@@ -16,6 +17,7 @@ public class SkateMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     private void FixedUpdate()
@@ -25,8 +27,11 @@ public class SkateMovement : MonoBehaviour
         float h_input = Input.GetAxis("Horizontal");
         float v_input = Input.GetAxis("Vertical");
 
-        physics(local_velocity);
-        inputs(h_input, v_input, local_velocity);
+        if (!playerInput.IsJumping)
+        {
+            physics(local_velocity);
+            inputs(h_input, v_input, local_velocity);
+        }
     }
     void physics(Vector3 local_velocity) //applys custom physics like sideways friction and gravity
     {
