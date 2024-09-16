@@ -157,11 +157,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9959081
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.09037185
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       propertyPath: m_LocalRotation.y
@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 10.37
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eaefd6c4b74a6845bedd14d855b6b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: {x: 0, y: -300, z: 0}
+  gravity: {x: 0, y: -400, z: 0}
   pushForce: 400
   maxSpeed: 7.5
   turn_speed: 15
@@ -1152,8 +1152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skate: {fileID: 1325941139}
-  ollieJumpForce: 1
-  highOllieJumpForce: 2
+  ollieJumpForce: 3
+  highOllieJumpForce: 5
   flipSpeed: 5
 --- !u!1 &2143224619
 GameObject:

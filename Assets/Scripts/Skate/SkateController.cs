@@ -24,24 +24,6 @@ public class SkateController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         trickHandler = GetComponentInChildren<TrickHandler>();
     }
-    private void Update()
-    {
-        if (trickHandler.IsTrickInProgress)
-        {
-            Vector3 currentRotation = rb.rotation.eulerAngles;
-
-            float rotationX = currentRotation.x;
-            Debug.Log(rotationX);
-            // Limitar la rotación en el eje X si excede el valor máximo
-            if (rotationX > maxHighOllieRotation)
-            {
-                Debug.Log("Rotación máxima alcanzada");
-                rb.constraints = RigidbodyConstraints.FreezeRotationX;
-            }
-            else
-                rb.constraints = RigidbodyConstraints.None;
-        }
-    }
 
     private void FixedUpdate()
     {

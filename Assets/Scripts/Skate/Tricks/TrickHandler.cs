@@ -11,14 +11,14 @@ public class TrickHandler : MonoBehaviour
 
     private PlayerInput input;
     private Rigidbody rb;
-    private Quaternion lastRotation;
 
     private float ollieRotationSpeed = 170; // Speed of the tilt
     private float tiltOllie = 30;  // Max tilt angle for the ollie
-    private float ollieResetSpeed = 3; // Speed to reset rotation after jump
 
 
     private bool isTrickInProgress;
+
+
     public bool IsTrickInProgress { get => isTrickInProgress; set => isTrickInProgress = value; }
 
     void Awake()
@@ -52,7 +52,7 @@ public class TrickHandler : MonoBehaviour
     {
         Quaternion initialRotation = rb.rotation;
         float currentRotationX = 0f;
-
+        rb.freezeRotation = true;
         // Rotar la tabla para hacer un Ollie
         while (currentRotationX < tiltOllie)
         {
@@ -60,8 +60,11 @@ public class TrickHandler : MonoBehaviour
             rb.MoveRotation(initialRotation * Quaternion.Euler(-currentRotationX, 0, 0));
             yield return null;
         }
+        rb.AddForce(Vector3.up * ollieJumpForce, ForceMode.Impulse);
+        rb.freezeRotation = false;
 
-       // yield return StartCoroutine(WaitForTrickInput());
+        yield return StartCoroutine(WaitForTrickInput());
+
     }
 
     IEnumerator WaitForTrickInput()
@@ -71,12 +74,12 @@ public class TrickHandler : MonoBehaviour
         // Esperar hasta que el jugador presione una tecla para hacer un truco
         while (!trickPerformed)
         {
-            if (Input.GetKeyDown(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.A))
             {
-                // yield return StartCoroutine(DoKickflip());
+                yield return StartCoroutine(DoKickflip());
                 trickPerformed = true;
             }
-            else if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.D))
             {
                 //  yield return StartCoroutine(DoHeelflip());
                 trickPerformed = true;
@@ -94,17 +97,38 @@ public class TrickHandler : MonoBehaviour
     IEnumerator DoKickflip()
     {
         Debug.Log("Flip");
-        // Implementar la lógica para el kickflip (por ejemplo, rotación en el eje Z)
-        float currentRotationZ = 0f;
         Quaternion initialRotation = rb.rotation;
-        rb.AddForce(Vector3.up * ollieJumpForce, ForceMode.Impulse);
-        while (currentRotationZ < 360)
-        {
-            currentRotationZ += flipSpeed * Time.deltaTime;
-            rb.MoveRotation(initialRotation * Quaternion.Euler(0, 0, currentRotationZ));
-            yield return null;
-        }
+        rb.freezeRotation = true;
+        float currentRotationZ = 0f;
+        float currentRotationX = 0f;
+
+        rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
+        //while (currentRotationZ < 360f)
+        //{
+        //    currentRotationZ += flipSpeed * Time.deltaTime;
+
+        //    while (currentRotationX < 40f)
+        //    {
+        //        currentRotationX += ollieRotationSpeed * Time.deltaTime;
+        //        rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, 0));
+        //    }
+        //    rb.MoveRotation(initialRotation * Quaternion.Euler(0, 0, currentRotationZ));
+        //    yield return null;
+        //}
+        rb.freezeRotation = false;
+        yield return null;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     IEnumerator DoHeelflip()
     {
@@ -122,7 +146,20 @@ public class TrickHandler : MonoBehaviour
 
     IEnumerator DoHighOllie()
     {
+        Debug.Log("HighOllie");
+        Quaternion initialRotation = rb.rotation;
+        rb.freezeRotation = true;
+        float currentRotationX = 0f;
+
         rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
+        while (currentRotationX < 40f)
+        {
+            currentRotationX += ollieRotationSpeed * Time.deltaTime;
+            rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, 0));
+            yield return null;
+        }
+
+        rb.freezeRotation = false;
         yield return null;
     }
 }
