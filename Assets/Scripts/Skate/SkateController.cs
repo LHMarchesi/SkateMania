@@ -3,22 +3,44 @@ using UnityEngine;
 
 public class SkateController : MonoBehaviour
 {
-    public Vector3 gravity = new(0, -300f, 0);
+    [SerializeField] private Vector3 gravity = new(0, -300f, 0);
 
     [SerializeField] private float pushForce;
     [SerializeField] private float maxSpeed = 7.5f;
-    [SerializeField] private float kickturn_thresh = 2f;
-    [SerializeField] private float kickturn_speed = 150f;
     [SerializeField] private float turn_speed = 15f;
-    [SerializeField] private float sidewaysFriction = 15f;
+
+    private float maxHighOllieRotation = 9;
+    private float kickturn_thresh = 2f;
+    private float kickturn_speed = 150f;
+    private float sidewaysFriction = 15f;
 
     private Rigidbody rb;
     private PlayerInput playerInput;
+    private TrickHandler trickHandler;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+        trickHandler = GetComponentInChildren<TrickHandler>();
+    }
+    private void Update()
+    {
+        if (trickHandler.IsTrickInProgress)
+        {
+            Vector3 currentRotation = rb.rotation.eulerAngles;
+
+            float rotationX = currentRotation.x;
+            Debug.Log(rotationX);
+            // Limitar la rotación en el eje X si excede el valor máximo
+            if (rotationX > maxHighOllieRotation)
+            {
+                Debug.Log("Rotación máxima alcanzada");
+                rb.constraints = RigidbodyConstraints.FreezeRotationX;
+            }
+            else
+                rb.constraints = RigidbodyConstraints.None;
+        }
     }
 
     private void FixedUpdate()
@@ -58,7 +80,7 @@ public class SkateController : MonoBehaviour
         rb.velocity = transform.TransformDirection(local_velocity); //set back to world rel
     }
 
-   private void Inputs(float h_input, float v_input, Vector3 local_velocity)  //controla los inputs para y agrega fuerzas   // Volver a ver
+    private void Inputs(float h_input, float v_input, Vector3 local_velocity)  //controla los inputs para y agrega fuerzas   // Volver a ver
     {
         //forward
         if (rb.velocity.magnitude < maxSpeed)

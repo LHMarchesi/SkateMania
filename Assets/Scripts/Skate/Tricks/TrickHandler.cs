@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class TrickHandler : MonoBehaviour
 {
-    [SerializeField] private PlayerInput input;
-    [SerializeField] private GameObject sktObj;
-    [SerializeField] private float ollieRotationSpeed; // Speed of the tilt
-    [SerializeField] private float maxOllieRotation;  // Max tilt angle for the ollie
-    [SerializeField] private float ollieJumpForce;    // Jump force for the ollie
-    [SerializeField] private float ollieResetSpeed;    // Speed to reset rotation after jump
-    [SerializeField] private float flipSpeed;    // Speed to reset rotation after jump
-    [SerializeField] private float highOllieJumpForce;    // Speed to reset rotation after jump
+    [SerializeField] private GameObject skate;
+    [SerializeField] private float ollieJumpForce;
+    [SerializeField] private float highOllieJumpForce;
+    [SerializeField] private float flipSpeed;
 
-    private Quaternion lastRotation;
+    private PlayerInput input;
     private Rigidbody rb;
-    void Start()
+    private Quaternion lastRotation;
+
+    private float ollieRotationSpeed = 170; // Speed of the tilt
+    private float tiltOllie = 30;  // Max tilt angle for the ollie
+    private float ollieResetSpeed = 3; // Speed to reset rotation after jump
+
+
+    private bool isTrickInProgress;
+    public bool IsTrickInProgress { get => isTrickInProgress; set => isTrickInProgress = value; }
+
+    void Awake()
     {
-        rb = sktObj.GetComponent<Rigidbody>();
+        rb = skate.GetComponent<Rigidbody>();
+        input = skate.GetComponent<PlayerInput>();
     }
 
     void Update()
     {
-        if (input.IsJumping)
+        if (input.IsJumping && !isTrickInProgress)
         {
             StartCoroutine(PerformTrick());
         }
@@ -30,56 +37,53 @@ public class TrickHandler : MonoBehaviour
 
     IEnumerator PerformTrick()
     {
+        isTrickInProgress = true;  // Mark that a trick is in progress
         input.SetJumping(true);
-        SkateController skateController = sktObj.GetComponent<SkateController>();
+        SkateController skateController = skate.GetComponent<SkateController>();
 
         yield return StartCoroutine(DoOllie(skateController));
 
         input.SetJumping(false);
+        isTrickInProgress = false;  // Reset after trick is done
+
     }
 
     IEnumerator DoOllie(SkateController skateControler)
     {
-        skateControler.gravity = Vector3.zero;
-
         Quaternion initialRotation = rb.rotation;
         float currentRotationX = 0f;
 
         // Rotar la tabla para hacer un Ollie
-        while (currentRotationX < maxOllieRotation)
+        while (currentRotationX < tiltOllie)
         {
             currentRotationX += ollieRotationSpeed * Time.deltaTime;
             rb.MoveRotation(initialRotation * Quaternion.Euler(-currentRotationX, 0, 0));
             yield return null;
         }
-        rb.AddForce(Vector3.up * ollieJumpForce, ForceMode.Impulse); // Apply the jump force after reaching the max tilt
 
-        skateControler.gravity = new(0, -300f, 0);
-
-        yield return StartCoroutine(WaitForTrickInput(initialRotation));
-
+       // yield return StartCoroutine(WaitForTrickInput());
     }
 
-    IEnumerator WaitForTrickInput(Quaternion initialRotation)
+    IEnumerator WaitForTrickInput()
     {
         bool trickPerformed = false;
 
         // Esperar hasta que el jugador presione una tecla para hacer un truco
         while (!trickPerformed)
         {
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.D))
             {
-               // yield return StartCoroutine(DoKickflip());
+                // yield return StartCoroutine(DoKickflip());
                 trickPerformed = true;
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.A))
             {
-              //  yield return StartCoroutine(DoHeelflip());
+                //  yield return StartCoroutine(DoHeelflip());
                 trickPerformed = true;
             }
-            else if (Input.GetKey(KeyCode.W))
+            else if (Input.GetKeyDown(KeyCode.W))
             {
-                yield return StartCoroutine(DoHighOllie(initialRotation));
+                yield return StartCoroutine(DoHighOllie());
                 trickPerformed = true;
             }
 
@@ -116,20 +120,9 @@ public class TrickHandler : MonoBehaviour
         }
     }
 
-    IEnumerator DoHighOllie(Quaternion initialRotation)
+    IEnumerator DoHighOllie()
     {
-        Debug.Log("High Ollie");
-
-        // Incrementar la fuerza del salto para un ollie más alto
         rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
-
-        while (Quaternion.Angle(rb.rotation, initialRotation) > 0.1f)
-        {
-            rb.MoveRotation(Quaternion.Slerp(rb.rotation, initialRotation, ollieResetSpeed * Time.deltaTime));
-            yield return null;
-        }
         yield return null;
     }
-
-
 }

@@ -10,7 +10,6 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode left = KeyCode.A;
     [SerializeField] private KeyCode right = KeyCode.D;
     [SerializeField] private KeyCode jump = KeyCode.Space;
-    [SerializeField] private KeyCode run = KeyCode.LeftShift;
 
     private Vector3 inputVector;
     public Vector3 InputVector => inputVector;
