@@ -50,17 +50,18 @@ public class TrickHandler : MonoBehaviour
 
     IEnumerator DoOllie(SkateController skateControler)
     {
+        rb.AddForce(Vector3.up * ollieJumpForce, ForceMode.Impulse);
         Quaternion initialRotation = rb.rotation;
         float currentRotationX = 0f;
-        rb.freezeRotation = true;
-        // Rotar la tabla para hacer un Ollie
+        //Rotar la tabla para hacer un Ollie
+
         while (currentRotationX < tiltOllie)
         {
+            rb.freezeRotation = true;
             currentRotationX += ollieRotationSpeed * Time.deltaTime;
             rb.MoveRotation(initialRotation * Quaternion.Euler(-currentRotationX, 0, 0));
             yield return null;
         }
-        rb.AddForce(Vector3.up * ollieJumpForce, ForceMode.Impulse);
         rb.freezeRotation = false;
 
         yield return StartCoroutine(WaitForTrickInput());
@@ -74,14 +75,14 @@ public class TrickHandler : MonoBehaviour
         // Esperar hasta que el jugador presione una tecla para hacer un truco
         while (!trickPerformed)
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.D))
             {
                 yield return StartCoroutine(DoKickflip());
                 trickPerformed = true;
             }
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.A))
             {
-                //  yield return StartCoroutine(DoHeelflip());
+                yield return StartCoroutine(DoHeelflip());
                 trickPerformed = true;
             }
             else if (Input.GetKeyDown(KeyCode.W))
@@ -97,63 +98,63 @@ public class TrickHandler : MonoBehaviour
     IEnumerator DoKickflip()
     {
         Debug.Log("Flip");
-        Quaternion initialRotation = rb.rotation;
         rb.freezeRotation = true;
+        Quaternion initialRotation = rb.rotation;
+
         float currentRotationZ = 0f;
         float currentRotationX = 0f;
 
         rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
-        //while (currentRotationZ < 360f)
-        //{
-        //    currentRotationZ += flipSpeed * Time.deltaTime;
+        while (currentRotationZ > -360f)
+        {
+            currentRotationZ -= flipSpeed * Time.deltaTime;
+            if (currentRotationX < 40f)
+            {
+                currentRotationX += ollieRotationSpeed * Time.deltaTime;
+            }
 
-        //    while (currentRotationX < 40f)
-        //    {
-        //        currentRotationX += ollieRotationSpeed * Time.deltaTime;
-        //        rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, 0));
-        //    }
-        //    rb.MoveRotation(initialRotation * Quaternion.Euler(0, 0, currentRotationZ));
-        //    yield return null;
-        //}
+            rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, currentRotationZ));
+            yield return null;
+        }
         rb.freezeRotation = false;
         yield return null;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     IEnumerator DoHeelflip()
     {
-        // Implementar la lógica para el heelflip (rotación en el eje Z inverso)
-        float currentRotationZ = 0f;
+        Debug.Log("HeelFlip");
+        rb.freezeRotation = true;
         Quaternion initialRotation = rb.rotation;
 
-        while (currentRotationZ > -360)
+        float currentRotationZ = 0f;
+        float currentRotationX = 0f;
+
+        rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
+        while (currentRotationZ < 360f)
         {
-            currentRotationZ -= flipSpeed * Time.deltaTime;
-            rb.MoveRotation(initialRotation * Quaternion.Euler(0, 0, currentRotationZ));
+            currentRotationZ += flipSpeed * Time.deltaTime;
+            if (currentRotationX < 40f)
+            {
+                currentRotationX += ollieRotationSpeed * Time.deltaTime;
+            }
+
+            rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, currentRotationZ));
             yield return null;
         }
+        rb.freezeRotation = false;
+        yield return null;
     }
 
     IEnumerator DoHighOllie()
     {
-        Debug.Log("HighOllie");
-        Quaternion initialRotation = rb.rotation;
-        rb.freezeRotation = true;
-        float currentRotationX = 0f;
-
         rb.AddForce(Vector3.up * highOllieJumpForce, ForceMode.Impulse);
+        Quaternion initialRotation = rb.rotation;
+        Debug.Log("HighOllie");
+
+        float currentRotationX = 0f;
         while (currentRotationX < 40f)
         {
+            rb.freezeRotation = true;
             currentRotationX += ollieRotationSpeed * Time.deltaTime;
             rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, 0));
             yield return null;

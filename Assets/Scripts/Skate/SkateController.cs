@@ -4,6 +4,7 @@ using UnityEngine;
 public class SkateController : MonoBehaviour
 {
     [SerializeField] private Vector3 gravity = new(0, -300f, 0);
+    [SerializeField] private GameObject SpawnPos;
 
     [SerializeField] private float pushForce;
     [SerializeField] private float maxSpeed = 7.5f;
@@ -24,7 +25,14 @@ public class SkateController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         trickHandler = GetComponentInChildren<TrickHandler>();
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            this.transform.position = SpawnPos.transform.position;
+            this.transform.rotation = SpawnPos.transform.rotation;
+        }
+    }
     private void FixedUpdate()
     {
         Vector3 local_velocity = transform.InverseTransformDirection(rb.velocity);
