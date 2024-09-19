@@ -31,19 +31,19 @@ public class PlayerInput : MonoBehaviour
         yInput = 0;
         zInput = 0;
 
-        if (Input.GetKey(forward))
+        if (Input.GetKeyDown(forward))
         {
             zInput++;
         }
-        if (Input.GetKey(backward))
+        if (Input.GetKeyDown(backward))
         {
             zInput--;
         }
-        if (Input.GetKey(left))
+        if (Input.GetKeyDown(left))
         {
             xInput--;
         }
-        if (Input.GetKey(right))
+        if (Input.GetKeyDown(right))
         {
             xInput++;
         }
