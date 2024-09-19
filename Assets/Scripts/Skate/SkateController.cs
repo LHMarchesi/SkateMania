@@ -21,6 +21,7 @@ public class SkateController : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         trickHandler = GetComponentInChildren<TrickHandler>();
@@ -46,6 +47,7 @@ public class SkateController : MonoBehaviour
             Inputs(h_input, v_input, local_velocity);
         }
     }
+
     private void Physics(Vector3 local_velocity) // custom physics movimiento lateral y gravedad
     {
         //gravity

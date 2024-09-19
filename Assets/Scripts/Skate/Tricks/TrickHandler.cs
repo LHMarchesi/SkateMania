@@ -9,16 +9,14 @@ public class TrickHandler : MonoBehaviour
     [SerializeField] private float highOllieJumpForce;
     [SerializeField] private float flipSpeed;
 
+    [SerializeField] private CheckWheelCollision checkWheelCollision;
     private PlayerInput input;
     private Rigidbody rb;
 
     private float ollieRotationSpeed = 170; // Speed of the tilt
     private float tiltOllie = 30;  // Max tilt angle for the ollie
 
-
     private bool isTrickInProgress;
-
-
     public bool IsTrickInProgress { get => isTrickInProgress; set => isTrickInProgress = value; }
 
     void Awake()
@@ -38,12 +36,11 @@ public class TrickHandler : MonoBehaviour
     IEnumerator PerformTrick()
     {
         isTrickInProgress = true;  // Mark that a trick is in progress
-        input.SetJumping(true);
+       
         SkateController skateController = skate.GetComponent<SkateController>();
 
         yield return StartCoroutine(DoOllie(skateController));
 
-        input.SetJumping(false);
         isTrickInProgress = false;  // Reset after trick is done
 
     }
@@ -73,7 +70,7 @@ public class TrickHandler : MonoBehaviour
         bool trickPerformed = false;
 
         // Esperar hasta que el jugador presione una tecla para hacer un truco
-        while (!trickPerformed)
+        while (!trickPerformed && !checkWheelCollision.IsGrounded)
         {
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -91,7 +88,7 @@ public class TrickHandler : MonoBehaviour
                 trickPerformed = true;
             }
 
-            yield return null; // Espera un frame
+            yield return null; 
         }
     }
 

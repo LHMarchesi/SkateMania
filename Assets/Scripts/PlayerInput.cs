@@ -11,8 +11,11 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode right = KeyCode.D;
     [SerializeField] private KeyCode jump = KeyCode.Space;
 
-    private Vector3 inputVector;
     public Vector3 InputVector => inputVector;
+
+    private Vector3 inputVector;
+
+    [SerializeField] private CheckWheelCollision checkWheelCollision;
 
     public bool IsJumping { get => isJumping; set => isJumping = value; }
 
@@ -47,7 +50,10 @@ public class PlayerInput : MonoBehaviour
 
         inputVector = new Vector3(xInput, yInput, zInput);
 
-        isJumping = Input.GetKey(jump);
+        if (checkWheelCollision.IsGrounded)
+        {
+            isJumping = Input.GetKeyDown(jump); 
+        }
     }
 
     void Update()
