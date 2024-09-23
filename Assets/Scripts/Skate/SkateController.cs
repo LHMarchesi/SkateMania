@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
 
+
 public class SkateController : MonoBehaviour
 {
     [SerializeField] private Vector3 gravity = new(0, -300f, 0);
+
     [SerializeField] private GameObject SpawnPos;
 
     [SerializeField] private float pushForce;
@@ -16,16 +18,26 @@ public class SkateController : MonoBehaviour
     private float sidewaysFriction = 15f;
 
     private Rigidbody rb;
+
     private PlayerInput playerInput;
+
     private TrickHandler trickHandler;
+
+    private bool isGrinding;
+
+    private string currentGrind;
 
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
+
         rb = GetComponent<Rigidbody>();
+
         playerInput = GetComponent<PlayerInput>();
+
         trickHandler = GetComponentInChildren<TrickHandler>();
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -33,7 +45,13 @@ public class SkateController : MonoBehaviour
             this.transform.position = SpawnPos.transform.position;
             this.transform.rotation = SpawnPos.transform.rotation;
         }
+
+        if (isGrinding)
+        {
+            HandleGrindInput();
+        }
     }
+
     private void FixedUpdate()
     {
         Vector3 local_velocity = transform.InverseTransformDirection(rb.velocity);
@@ -44,17 +62,17 @@ public class SkateController : MonoBehaviour
         if (!playerInput.IsJumping)
         {
             Physics(local_velocity);
+
             Inputs(h_input, v_input, local_velocity);
         }
     }
 
-    private void Physics(Vector3 local_velocity) // custom physics movimiento lateral y gravedad
+    private void Physics(Vector3 local_velocity)
     {
-        //gravity
         rb.AddForce(gravity * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        //add sideways friction for turning 
         float sideways_velocity = local_velocity.x;
+
         if (sideways_velocity > 0.3)
         {
             sideways_velocity -= sidewaysFriction * Time.fixedDeltaTime;
@@ -67,21 +85,23 @@ public class SkateController : MonoBehaviour
         {
             sideways_velocity = 0;
         }
-        local_velocity.x = sideways_velocity; //set back
 
-        rb.velocity = transform.TransformDirection(local_velocity); //set back to world rel
+        local_velocity.x = sideways_velocity;
+
+        rb.velocity = transform.TransformDirection(local_velocity);
     }
 
-    private void Inputs(float h_input, float v_input, Vector3 local_velocity)  //controla los inputs para y agrega fuerzas   // Volver a ver
+    private void Inputs(float h_input, float v_input, Vector3 local_velocity)
     {
-        //forward
         if (rb.velocity.magnitude < maxSpeed)
         {
             rb.AddForce(transform.forward * v_input * Time.fixedDeltaTime * 400, ForceMode.Acceleration);
+
+            Debug.Log("Adelante");
         }
 
-        //rotate rigid
         Quaternion delta_rotation;
+
         if (Math.Abs(local_velocity.z) <= kickturn_thresh && Math.Abs(v_input) == 0)
         {
             delta_rotation = Quaternion.Euler(new Vector3(0, h_input, 0) * Time.fixedDeltaTime * kickturn_speed);
@@ -91,8 +111,62 @@ public class SkateController : MonoBehaviour
             delta_rotation = Quaternion.Euler(new Vector3(0, h_input, 0) * Time.fixedDeltaTime * local_velocity.z * turn_speed);
         }
 
-        //using MoveRotation for physics handling
         rb.MoveRotation(rb.rotation * delta_rotation);
+    }
 
+    private void HandleGrindInput()
+    {
+        if (Input.GetButton("GrindLeft"))
+        {
+            currentGrind = "left";
+
+            rb.velocity = new Vector3(-pushForce, rb.velocity.y, rb.velocity.z); // Move to the left
+
+            Debug.Log("grind left");
+        }
+        else if (Input.GetButton("GrindRight"))
+        {
+            currentGrind = "right";
+
+            rb.velocity = new Vector3(pushForce, rb.velocity.y, rb.velocity.z); // Move to the right
+
+            Debug.Log("grind right");
+        }
+
+        if (Input.GetButtonUp("GrindLeft") || Input.GetButtonUp("GrindRight"))
+        {
+            ExitGrind();
+        }
+
+        if (playerInput.IsJumping)
+        {
+            ExitGrind();
+        }
+
+        Debug.Log("Grinding: " + currentGrind);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Grindable")
+        {
+            isGrinding = true;
+            rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Grindable")
+        {
+            ExitGrind();
+        }
+    }
+
+    private void ExitGrind()
+    {
+        isGrinding = false;
+        currentGrind = null;
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
     }
 }

@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 413815968}
   m_Layer: 0
   m_Name: Cube (7)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 582264286}
   m_Layer: 0
   m_Name: Cube (9)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -517,9 +517,6 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1889974153}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2117491436}
     - targetCorrespondingSourceObject: {fileID: 8614371469583642526, guid: b3e61d6cc1346a44e82cd51b321ca595, type: 3}
       insertIndex: -1
@@ -564,7 +561,7 @@ GameObject:
   - component: {fileID: 653951646}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -763,7 +760,7 @@ GameObject:
   - component: {fileID: 771709600}
   m_Layer: 0
   m_Name: Cube (10)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1079,7 +1076,7 @@ GameObject:
   - component: {fileID: 1104067688}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1286,7 +1283,7 @@ GameObject:
   - component: {fileID: 1186080634}
   m_Layer: 0
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1732,7 +1729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravity: {x: 0, y: -980, z: 0}
   SpawnPos: {fileID: 1122536143}
-  pushForce: 800
+  pushForce: 15
   maxSpeed: 30
   turn_speed: 15
 --- !u!114 &1325941144
@@ -2120,7 +2117,7 @@ GameObject:
   - component: {fileID: 1418724061}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2352,7 +2349,7 @@ GameObject:
   - component: {fileID: 1492985697}
   m_Layer: 0
   m_Name: Cube (8)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2457,7 +2454,7 @@ GameObject:
   - component: {fileID: 1821438758}
   m_Layer: 0
   m_Name: Cube (6)
-  m_TagString: Untagged
+  m_TagString: Grindable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2559,6 +2556,7 @@ GameObject:
   - component: {fileID: 1889974153}
   - component: {fileID: 1889974155}
   - component: {fileID: 1889974154}
+  - component: {fileID: 1889974156}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -2574,12 +2572,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1889974152}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10629763, y: 0.0017860929, z: -0.00018938366, w: -0.9943328}
-  m_LocalPosition: {x: 0.023376226, y: 0.813414, z: -1.4599308}
-  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_LocalRotation: {x: -0.19572237, y: 0.0017959028, z: -0.00002719462, w: -0.98065776}
+  m_LocalPosition: {x: 0.07012904, y: 7.0487638, z: 3.1010013}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1325941142}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &1889974154
 AudioListener:
@@ -2640,6 +2638,23 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1889974156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889974152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21b92a716661624e8714044613d86ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1325941142}
+  offset: {x: 0, y: 0, z: 0}
+  smoothSpeed: 0.125
+  height: 5
+  distance: 12.96
 --- !u!1 &2042433877
 GameObject:
   m_ObjectHideFlags: 0
@@ -2922,6 +2937,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1889974153}
   - {fileID: 705507995}
   - {fileID: 2143224623}
   - {fileID: 630012979}

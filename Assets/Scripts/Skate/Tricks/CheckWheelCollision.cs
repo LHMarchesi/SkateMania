@@ -22,17 +22,17 @@ public class CheckWheelCollision : MonoBehaviour
 
     private void CheckIfGrounded()
     {
-        bool allWheelsGrounded = true; // Asumimos que todas están tocando el suelo inicialmente
+        bool allWheelsGrounded = true;
 
         foreach (WheelCollider wheel in wheelColliders)
         {
-            if (!wheel.isGrounded) // Si alguna rueda no está tocando el suelo
+            if (!wheel.isGrounded)
             {
-                allWheelsGrounded = false; // Cambia a false
+                allWheelsGrounded = false;
                 break;
             }
         }
        
-        IsGrounded = allWheelsGrounded; // Asigna el resultado a IsGrounded
+        IsGrounded = allWheelsGrounded;
     }
 }

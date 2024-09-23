@@ -13,8 +13,8 @@ public class TrickHandler : MonoBehaviour
     private PlayerInput input;
     private Rigidbody rb;
 
-    private float ollieRotationSpeed = 170; // Speed of the tilt
-    private float tiltOllie = 30;  // Max tilt angle for the ollie
+    private float ollieRotationSpeed = 170;
+    private float tiltOllie = 30; 
 
     private bool isTrickInProgress;
     public bool IsTrickInProgress { get => isTrickInProgress; set => isTrickInProgress = value; }
@@ -113,6 +113,7 @@ public class TrickHandler : MonoBehaviour
             rb.MoveRotation(initialRotation * Quaternion.Euler(currentRotationX, 0, currentRotationZ));
             yield return null;
         }
+
         rb.freezeRotation = false;
         yield return null;
     }
