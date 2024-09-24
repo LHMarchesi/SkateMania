@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class SkateController : MonoBehaviour
@@ -27,6 +29,11 @@ public class SkateController : MonoBehaviour
 
     private string currentGrind;
 
+    private int totalPoints = 0;
+
+    public TextMeshProUGUI trickText;
+    public TextMeshProUGUI pointsText;
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -44,12 +51,27 @@ public class SkateController : MonoBehaviour
         {
             this.transform.position = SpawnPos.transform.position;
             this.transform.rotation = SpawnPos.transform.rotation;
+
+            totalPoints = 0; // Update points
+            pointsText.text = "Points: " + totalPoints; // Update point text
+            trickText.text = "Trick: ";
         }
 
         if (isGrinding)
         {
             HandleGrindInput();
         }
+
+        float speed = rb.velocity.magnitude;
+
+        FindObjectOfType<UiManager>().UpdateSpeed(speed);
+    }
+
+    public void AddPoints(int points, string trickName)
+    {
+        totalPoints += points;
+        trickText.text = "You Made: " + trickName + "!";
+        pointsText.text = "Points: " + totalPoints;
     }
 
     private void FixedUpdate()
