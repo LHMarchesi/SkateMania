@@ -1,31 +1,18 @@
 using TMPro;
 using UnityEngine;
 
-public class WinCondition : MonoBehaviour
+public class WinTrigger : MonoBehaviour
 {
-    [SerializeField] GameObject WinScreen;
-    [SerializeField] TextMeshProUGUI totalPoints;
-
-    private void Awake()
-    {
-        WinScreen.SetActive(false);
-    }
-
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
-            WinScreen.SetActive(true);
-            SkateController player = other.GetComponent<SkateController>();
-            totalPoints.text = "Total points: " + player.TotalPoints.ToString();
-        }
-    }
+        { 
+            LevelManager levelManager = FindObjectsOfType<LevelManager>()[0];
+            levelManager.TriggerWin();
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            WinScreen.SetActive(false);
+            SkateController player = other.GetComponent<SkateController>();
+            levelManager.totalPoints.text = "Total points: " + player.TotalPoints.ToString();
         }
     }
 }

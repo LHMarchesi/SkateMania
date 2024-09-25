@@ -49,7 +49,7 @@ public class SkateController : MonoBehaviour
 
     private void Update()
     {
-        Restart();
+        
         if (isGrinding)
         {
             HandleGrindInput();
@@ -186,19 +186,14 @@ public class SkateController : MonoBehaviour
 
     public void Restart()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
             this.transform.position = SpawnPos.transform.position;
             this.transform.rotation = SpawnPos.transform.rotation;
 
             rb.velocity = Vector3.zero;
 
-            TotalPoints = 0; // Update points
             pointsText.text = "Points: " + TotalPoints; // Update point text
-            TotalPoints = 0; // Reiniciar puntaje
 
             pointsText.text = "Points: " + TotalPoints; // Actualizar el texto de puntos
             trickText.text = "Trick: ";
-        }
     }
 }
