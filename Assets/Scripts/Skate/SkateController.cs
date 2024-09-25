@@ -54,6 +54,9 @@ public class SkateController : MonoBehaviour
 
             totalPoints = 0; // Update points
             pointsText.text = "Points: " + totalPoints; // Update point text
+            totalPoints = 0; // Reiniciar puntaje
+
+            pointsText.text = "Points: " + totalPoints; // Actualizar el texto de puntos
             trickText.text = "Trick: ";
         }
 
@@ -73,6 +76,7 @@ public class SkateController : MonoBehaviour
         trickText.text = "You Made: " + trickName + "!";
         pointsText.text = "Points: " + totalPoints;
     }
+
 
     private void FixedUpdate()
     {
