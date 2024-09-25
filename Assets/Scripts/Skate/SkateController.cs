@@ -11,10 +11,9 @@ public class SkateController : MonoBehaviour
     [SerializeField] private GameObject SpawnPos;
 
     [SerializeField] private float pushForce;
-    [SerializeField] private float maxSpeed = 7.5f;
+    [SerializeField] private float maxSpeed;
     [SerializeField] private float turn_speed = 15f;
 
-    private float maxHighOllieRotation = 9;
     private float kickturn_thresh = 2f;
     private float kickturn_speed = 150f;
     private float sidewaysFriction = 15f;
@@ -34,7 +33,7 @@ public class SkateController : MonoBehaviour
     public TextMeshProUGUI trickText;
     public TextMeshProUGUI pointsText;
 
-    private WinLoose winLooseScript;
+    public int TotalPoints { get => totalPoints; set => totalPoints = value; }
 
     private void Awake()
     {
@@ -46,7 +45,6 @@ public class SkateController : MonoBehaviour
 
         trickHandler = GetComponentInChildren<TrickHandler>();
 
-        winLooseScript = FindObjectOfType<WinLoose>();
     }
 
     private void Update()
@@ -64,9 +62,9 @@ public class SkateController : MonoBehaviour
 
     public void AddPoints(int points, string trickName)
     {
-        totalPoints += points;
+        TotalPoints += points;
         trickText.text = "You Made: " + trickName + "!";
-        pointsText.text = "Points: " + totalPoints;
+        pointsText.text = "Points: " + TotalPoints;
     }
 
 
@@ -82,18 +80,6 @@ public class SkateController : MonoBehaviour
             Physics(local_velocity);
 
             Inputs(h_input, v_input, local_velocity);
-        }
-
-        if (transform.rotation.eulerAngles.x > 90 || transform.rotation.eulerAngles.x < -90)
-        {
-            if (winLooseScript != null)
-            {
-                winLooseScript.LooseLevel("You Loose! The board flipped!");
-            }
-            else
-            {
-                Debug.LogError("WinLoose script not found!");
-            }
         }
     }
 
@@ -126,8 +112,6 @@ public class SkateController : MonoBehaviour
         if (rb.velocity.magnitude < maxSpeed)
         {
             rb.AddForce(transform.forward * v_input * Time.fixedDeltaTime * 400, ForceMode.Acceleration);
-
-            Debug.Log("Adelante");
         }
 
         Quaternion delta_rotation;
@@ -207,11 +191,13 @@ public class SkateController : MonoBehaviour
             this.transform.position = SpawnPos.transform.position;
             this.transform.rotation = SpawnPos.transform.rotation;
 
-            totalPoints = 0; // Update points
-            pointsText.text = "Points: " + totalPoints; // Update point text
-            totalPoints = 0; // Reiniciar puntaje
+            rb.velocity = Vector3.zero;
 
-            pointsText.text = "Points: " + totalPoints; // Actualizar el texto de puntos
+            TotalPoints = 0; // Update points
+            pointsText.text = "Points: " + TotalPoints; // Update point text
+            TotalPoints = 0; // Reiniciar puntaje
+
+            pointsText.text = "Points: " + TotalPoints; // Actualizar el texto de puntos
             trickText.text = "Trick: ";
         }
     }
