@@ -34,6 +34,8 @@ public class SkateController : MonoBehaviour
     public TextMeshProUGUI trickText;
     public TextMeshProUGUI pointsText;
 
+    private WinLoose winLooseScript;
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -43,6 +45,8 @@ public class SkateController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         trickHandler = GetComponentInChildren<TrickHandler>();
+
+        winLooseScript = FindObjectOfType<WinLoose>();
     }
 
     private void Update()
@@ -90,6 +94,18 @@ public class SkateController : MonoBehaviour
             Physics(local_velocity);
 
             Inputs(h_input, v_input, local_velocity);
+        }
+
+        if (transform.rotation.eulerAngles.x > 90 || transform.rotation.eulerAngles.x < -90)
+        {
+            if (winLooseScript != null)
+            {
+                winLooseScript.LooseLevel("You Loose! The board flipped!");
+            }
+            else
+            {
+                Debug.LogError("WinLoose script not found!");
+            }
         }
     }
 
