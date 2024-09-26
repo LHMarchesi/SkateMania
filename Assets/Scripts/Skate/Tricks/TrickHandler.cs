@@ -8,6 +8,9 @@ public class TrickHandler : MonoBehaviour
     [SerializeField] private float ollieJumpForce;
     [SerializeField] private float highOllieJumpForce;
     [SerializeField] private float flipSpeed;
+    private AudioSource audioSource;
+     public AudioClip jumpSound;
+     public AudioClip trickSound;
 
     [SerializeField] private CheckWheelCollision checkWheelCollision;
 
@@ -27,6 +30,8 @@ public class TrickHandler : MonoBehaviour
 
     void Awake()
     {
+
+        audioSource = skate.GetComponent<AudioSource>();
         rb = skate.GetComponent<Rigidbody>();
         input = skate.GetComponent<PlayerInput>();
 
@@ -39,6 +44,8 @@ public class TrickHandler : MonoBehaviour
     {
         if (input.IsJumping && !isTrickInProgress)
         {
+            audioSource.clip = jumpSound;
+            audioSource.Play();
             StartCoroutine(PerformTrick());
         }
     }
@@ -90,6 +97,8 @@ public class TrickHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.D))
             {
+                audioSource.clip = trickSound;
+                audioSource.Play();
                 yield return StartCoroutine(DoKickflip());
                 skateController.AddPoints(200, "Kickflip");
                 uiManager.UpdateTrickText("Kickflip");
@@ -98,6 +107,8 @@ public class TrickHandler : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.A))
             {
+                audioSource.clip = trickSound;
+                audioSource.Play();
                 yield return StartCoroutine(DoHeelflip());
                 skateController.AddPoints(250, "Heelflip");
                 uiManager.UpdateTrickText("Heelflip");
@@ -106,6 +117,8 @@ public class TrickHandler : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.W))
             {
+                audioSource.clip = trickSound;
+                audioSource.Play();
                 yield return StartCoroutine(DoHighOllie());
                 skateController.AddPoints(150, "High Ollie");
                 uiManager.UpdateTrickText("High Ollie");

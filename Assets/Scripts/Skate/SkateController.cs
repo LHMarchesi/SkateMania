@@ -13,6 +13,7 @@ public class SkateController : MonoBehaviour
     [SerializeField] private float pushForce;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float turn_speed = 15f;
+    [SerializeField] private PauseMenu pauseMenu;
 
     private float kickturn_thresh = 2f;
     private float kickturn_speed = 150f;
@@ -49,15 +50,18 @@ public class SkateController : MonoBehaviour
 
     private void Update()
     {
-        
+
         if (isGrinding)
         {
             HandleGrindInput();
         }
 
         float speed = rb.velocity.magnitude;
+        if (!pauseMenu.IsPause)
+        {
 
-        FindObjectOfType<UiManager>().UpdateSpeed(speed);
+            FindObjectOfType<UiManager>().UpdateSpeed(speed);
+        }
     }
 
     public void AddPoints(int points, string trickName)
@@ -186,14 +190,14 @@ public class SkateController : MonoBehaviour
 
     public void Restart()
     {
-            this.transform.position = SpawnPos.transform.position;
-            this.transform.rotation = SpawnPos.transform.rotation;
+        this.transform.position = SpawnPos.transform.position;
+        this.transform.rotation = SpawnPos.transform.rotation;
 
-            rb.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
 
-            pointsText.text = "Points: " + TotalPoints; // Update point text
+        pointsText.text = "Points: " + TotalPoints; // Update point text
 
-            pointsText.text = "Points: " + TotalPoints; // Actualizar el texto de puntos
-            trickText.text = "Trick: ";
+        pointsText.text = "Points: " + TotalPoints; // Actualizar el texto de puntos
+        trickText.text = "Trick: ";
     }
 }

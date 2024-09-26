@@ -7,18 +7,21 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject menuPause;
-    public bool Pause = false;
+    public GameObject UIPanel;
+    private bool isPause;
     [SerializeField] private GameObject SpawnPos;
     private int totalPoints = 0;
     public TextMeshProUGUI pointsText;
     public TextMeshProUGUI trickText;
     public GameObject audioPanel;
-    public GameObject pauseMenu;
     public Slider volumeMaster;
     public AudioMixer mixer;
 
+    public bool IsPause { get => isPause; set => isPause = value; }
+
     public void Awake()
     {
+        IsPause = false;
         volumeMaster.onValueChanged.AddListener(ChangeVolume);
     }
 
@@ -30,7 +33,7 @@ public class PauseMenu : MonoBehaviour
     public void OpenPanel(GameObject panel)
     {
         audioPanel.SetActive(false);
-        pauseMenu.SetActive(false);
+        menuPause.SetActive(false);
 
         panel.SetActive(true);
     }
@@ -39,10 +42,11 @@ public class PauseMenu : MonoBehaviour
     {
        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(Pause == false)
+            if(!IsPause)
             {
+                UIPanel.SetActive(false);
                 menuPause.SetActive(true);
-                Pause = true;
+                IsPause = true;
 
                 Time.timeScale = 0f;
                 Cursor.visible = true;
@@ -55,8 +59,9 @@ public class PauseMenu : MonoBehaviour
                     sounds[i].Pause();
                 }
             }
-            else if(Pause == true) 
+            else  
             {
+               
                 Resume();
                 audioPanel.SetActive(false);
             }
@@ -65,8 +70,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        UIPanel.SetActive(true);
         menuPause.SetActive(false);
-        Pause = false;
+        IsPause = false;
 
         Time.timeScale = 1f;
         Cursor.visible=false;
@@ -85,7 +91,7 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(menu);
         Time.timeScale = 1f;
         menuPause.SetActive(false);
-        Pause = false;
+        IsPause = false;
 
         AudioSource[] sounds = FindObjectsOfType<AudioSource>();
 
